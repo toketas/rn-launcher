@@ -5,20 +5,25 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  View,
 } from 'react-native';
 
-import { launch_app, set_default_launcher } from '../services/launcher';
+import { launch_app, set_default_launcher } from '../helpers/launcher';
 import { Item } from '../components/Item';
-import { addFavListItem } from '../services/storage';
+import { addFavListItem } from '../helpers/storage';
+import theme from '../config/theme';
 
 const AppList = ({ list, updateList }) => {
   return (
     <SafeAreaView>
       <Pressable onPress={set_default_launcher} style={styles.item}>
-        <Text style={{ fontFamily: 'FiraCode' }}>Set default launcher</Text>
+        <Text style={{ fontFamily: theme.font_family }}>
+          Set default launcher
+        </Text>
       </Pressable>
       <FlatList
         data={list}
+        style={styles.list}
         renderItem={({ item }) => (
           <Item
             key={item.packageName}
@@ -40,12 +45,12 @@ const AppList = ({ list, updateList }) => {
 
 const styles = StyleSheet.create({
   item: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 4,
+    padding: 16,
+    marginVertical: 4,
+    marginHorizontal: 2,
   },
-  title: {
-    color: 'white',
+  list: {
+    backgroundColor: theme.bg_color,
   },
 });
 
