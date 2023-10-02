@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Swiper from 'react-native-swiper';
 import AppList from './screens/AppList';
 import Home from './screens/Home';
-import {get_app_list} from './services/launcher';
-import {getFavList} from './services/storage';
+import { get_app_list } from './services/launcher';
+import { getFavList } from './services/storage';
 
 const Router = () => {
   const [appList, setAppList] = useState([]);

@@ -7,19 +7,19 @@ import {
   Text,
 } from 'react-native';
 
-import {launch_app, set_default_launcher} from '../services/launcher';
-import {Item} from '../components/Item';
-import {addFavListItem} from '../services/storage';
+import { launch_app, set_default_launcher } from '../services/launcher';
+import { Item } from '../components/Item';
+import { addFavListItem } from '../services/storage';
 
-const AppList = ({list, updateList}) => {
+const AppList = ({ list, updateList }) => {
   return (
     <SafeAreaView>
       <Pressable onPress={set_default_launcher} style={styles.item}>
-        <Text>Set default launcher</Text>
+        <Text style={{ fontFamily: 'FiraCode' }}>Set default launcher</Text>
       </Pressable>
       <FlatList
         data={list}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <Item
             key={item.packageName}
             item={item}

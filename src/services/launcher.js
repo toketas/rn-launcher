@@ -1,4 +1,4 @@
-import {InstalledApps, RNLauncherKitHelper} from 'react-native-launcher-kit';
+import { InstalledApps, RNLauncherKitHelper } from 'react-native-launcher-kit';
 
 export const launch_app = async packageName => {
   await RNLauncherKitHelper.launchApplication(packageName);

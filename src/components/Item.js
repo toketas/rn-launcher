@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, StyleSheet, Text} from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
+import theme from '../config/theme';
 
 const styles = StyleSheet.create({
   item: {
@@ -8,20 +9,29 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   title: {
-    color: 'white',
+    color: theme.font_color,
+    fontFamily: theme.font_family,
   },
 });
 
-export const Item = ({item, onPress, onLongPress}) => (
+export const Item = ({ item, onPress, onLongPress }) => (
   <Pressable
     onPress={() => onPress(item)}
     onLongPress={() => onLongPress(item)}
-    style={({pressed}) => [
+    style={({ pressed }) => [
       {
-        backgroundColor: pressed ? 'blue' : 'black',
+        backgroundColor: pressed ? 'white' : theme.bg_color,
       },
       styles.item,
     ]}>
-    <Text style={styles.title}>{item.label}</Text>
+    {({ pressed }) => (
+      <Text
+        style={{
+          color: pressed ? 'black' : theme.font_color,
+          fontFamily: theme.font_family,
+        }}>
+        {item.label}
+      </Text>
+    )}
   </Pressable>
 );
