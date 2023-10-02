@@ -5,8 +5,8 @@ import theme from '../config/theme';
 const styles = StyleSheet.create({
   item: {
     padding: 15,
-    marginVertical: 5,
-    marginHorizontal: 4,
+    marginVertical: 0,
+    marginHorizontal: 0,
   },
   title: {
     color: theme.font_color,
@@ -18,6 +18,7 @@ export const Item = ({ item, onPress, onLongPress }) => (
   <Pressable
     onPress={() => onPress(item)}
     onLongPress={() => onLongPress(item)}
+    delayLongPress={1000}
     style={({ pressed }) => [
       {
         backgroundColor: pressed ? 'white' : theme.bg_color,
