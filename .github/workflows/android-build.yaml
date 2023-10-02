@@ -10,7 +10,6 @@ jobs:
   android-build:
     name: Android Build
     runs-on: macos-latest
-    needs: [check-mobile-changes]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
