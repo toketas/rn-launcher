@@ -7,25 +7,30 @@ import { get_app_list } from './helpers/launcher';
 import { getFavList } from './helpers/storage';
 
 const Router = () => {
+  const [index, setIndex] = useState(0);
   const [appList, setAppList] = useState([]);
   const [favList, setFavList] = useState([]);
 
   useEffect(() => {
-    loadApps();
+    setIndex(0);
     loadFavList();
+    loadApps();
   }, []);
 
-  const onIndexChanged = index => {
-    if (index === 0) {
+  const onIndexChanged = i => {
+    if (i === 0) {
       loadFavList();
     }
-    if (index === 1) {
+    if (i === 1) {
       loadApps();
     }
+    setIndex(i);
   };
 
   const loadApps = async () => {
-    await setAppList(get_app_list());
+    const list = await get_app_list();
+    //console.log('listaa', list.length);
+    await setAppList(list);
   };
 
   const loadFavList = async () => {
@@ -37,11 +42,12 @@ const Router = () => {
     <Swiper
       showsPagination={false}
       loop={false}
-      onIndexChanged={index => {
-        onIndexChanged(index);
+      index={index}
+      onIndexChanged={i => {
+        onIndexChanged(i);
       }}>
       <Home favList={favList} updateList={loadFavList} />
-      <AppList list={appList} updateList={loadFavList} />
+      <AppList key={appList} list={appList} updateList={loadFavList} />
     </Swiper>
   );
 };
