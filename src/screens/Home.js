@@ -1,24 +1,14 @@
-import React from 'react';
-import { DeviceEventEmitter, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { AppState, Text } from 'react-native';
+import { View } from 'native-base';
 
+import FavoriteList from '../components/FavoriteList';
 import theme from '../config/theme';
-import { Item } from '../components/Item';
 import { launch_app } from '../helpers/launcher';
-import { removeFavListItem } from '../helpers/storage';
-
-const styles = StyleSheet.create({
-  bg: {
-    flex: 1,
-    backgroundColor: theme.bg_color,
-  },
-  favlist: {
-    flex: 1,
-    backgroundColor: theme.bg_color,
-  },
-});
+import { getFavList, removeFavListItem } from '../helpers/storage';
 
 const HintMessage = () => (
-  <View style={{ flex: 1, padding: 20 }}>
+  <View flex={1} padding={20}>
     <Text style={{ fontFamily: theme.font_family, color: theme.font_color }}>
       First time here bud? Swipe left to list your apps.
     </Text>
@@ -29,33 +19,54 @@ const HintMessage = () => (
   </View>
 );
 
-const FavList = ({ list, updateList }) => {
+const Home = ({ navigation }) => {
+  const [favList, setFavList] = useState([]);
+
+  const updateList = async () => {
+    const list = await getFavList();
+    setFavList(list);
+  };
+
+  const removeItem = async item => {
+    await removeFavListItem(item);
+    updateList();
+  };
+
+  const openItem = item => launch_app(item.packageName);
+
+  useEffect(() => {
+    updateList();
+  }, []);
+
+  useEffect(() => {
+    AppState.addEventListener('change', async state => {
+      if (state !== 'active') {
+        navigation.navigate('Home');
+      }
+    });
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      updateList();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
-    <View style={styles.favlist}>
-      {list.map(item => (
-        <Item
-          key={item.packageName}
-          item={item}
-          onPress={() => launch_app(item.packageName)}
-          onLongPress={async () => {
-            await removeFavListItem(item);
-            updateList();
-          }}
+    <View backgroundColor={theme.bg_color} flex={1}>
+      <View flex={1} />
+      {favList.length ? (
+        <FavoriteList
+          list={favList}
+          removeItem={removeItem}
+          openItem={openItem}
+          updateList={updateList}
         />
-      ))}
+      ) : (
+        <HintMessage />
+      )}
     </View>
   );
 };
-
-const Home = ({ favList, updateList }) => (
-  <View style={styles.bg}>
-    <View style={{ flex: 1 }} />
-    {favList.length ? (
-      <FavList list={favList} updateList={updateList} />
-    ) : (
-      <HintMessage />
-    )}
-  </View>
-);
 
 export default Home;

@@ -1,5 +1,5 @@
-import { NativeBaseProvider } from 'native-base';
 import React from 'react';
+import { NativeBaseProvider } from 'native-base';
 
 import Router from './Router';
 

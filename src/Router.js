@@ -1,55 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import Swiper from 'react-native-swiper';
+import React from 'react';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 
 import AppList from './screens/AppList';
 import Home from './screens/Home';
-import { get_app_list } from './helpers/launcher';
-import { getFavList } from './helpers/storage';
 
-const Router = () => {
-  const [index, setIndex] = useState(0);
-  const [appList, setAppList] = useState([]);
-  const [favList, setFavList] = useState([]);
+const Tab = createMaterialTopTabNavigator();
 
-  useEffect(() => {
-    setIndex(0);
-    loadFavList();
-    loadApps();
-  }, []);
-
-  const onIndexChanged = i => {
-    if (i === 0) {
-      loadFavList();
-    }
-    if (i === 1) {
-      loadApps();
-    }
-    setIndex(i);
-  };
-
-  const loadApps = async () => {
-    const list = await get_app_list();
-    //console.log('listaa', list.length);
-    await setAppList(list);
-  };
-
-  const loadFavList = async () => {
-    const list = await getFavList();
-    await setFavList(list);
-  };
-
-  return (
-    <Swiper
-      showsPagination={false}
-      loop={false}
-      index={index}
-      onIndexChanged={i => {
-        onIndexChanged(i);
+const Router = () => (
+  <NavigationContainer>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarStyle: { height: '0', display: 'none' },
       }}>
-      <Home favList={favList} updateList={loadFavList} />
-      <AppList key={appList} list={appList} updateList={loadFavList} />
-    </Swiper>
-  );
-};
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="AppList" component={AppList} />
+    </Tab.Navigator>
+  </NavigationContainer>
+);
 
 export default Router;

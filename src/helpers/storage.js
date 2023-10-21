@@ -19,7 +19,7 @@ export const addFavListItem = async item => {
     show('%s already present on favorites!', item.label);
     return;
   }
-  console.log('adding package %s on favorites...', item.label);
+  console.info('adding package %s on favorites...', item.label);
   currentList.push({ packageName: item.packageName, label: item.label });
   const newList = currentList.sort(el => el.label);
   await AsyncStorage.setItem('favList', JSON.stringify(newList));

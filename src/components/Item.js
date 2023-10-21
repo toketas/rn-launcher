@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Item = ({ item, onPress, onLongPress }) => (
+const Item = ({ item, onPress, onLongPress }) => (
   <Pressable
     onPress={() => onPress(item)}
     onLongPress={() => onLongPress(item)}
@@ -36,3 +36,5 @@ export const Item = ({ item, onPress, onLongPress }) => (
     )}
   </Pressable>
 );
+
+export default Item;

@@ -1,48 +1,71 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   FlatList,
-  KeyboardAvoidingView,
   Pressable,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   TextInput,
-  View,
 } from 'react-native';
 import { debounce } from 'lodash';
-import { SearchIcon, ThreeDotsIcon } from 'native-base';
+import { SearchIcon, ThreeDotsIcon, View } from 'native-base';
 
-import { launch_app, set_default_launcher } from '../helpers/launcher';
-import { Item } from '../components/Item';
-import { addFavListItem } from '../helpers/storage';
+import Item from '../components/Item';
 import theme from '../config/theme';
+import { addFavListItem } from '../helpers/storage';
+import {
+  get_app_list,
+  launch_app,
+  set_default_launcher,
+} from '../helpers/launcher';
 import { normalize_str } from '../helpers/normalizer';
 
-const AppList = ({ list, updateList }) => {
-  const [localList, setLocalList] = useState(list);
+const AppList = ({ navigation }) => {
+  const [localList, setLocalList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
   const [search, setSearch] = useState('');
 
-  const onSearch = value => {
-    setSearch(value);
+  useEffect(() => {
+    // TODO: fazer funcionar o unfocus, limpar search
+    navigation.addListener('tabPress', () => {
+      setSearch('');
+    });
+  }, [navigation]);
 
-    //console.log('list', list.length);
+  useEffect(() => {
+    const focus = navigation.addListener('focus', () => {
+      // The screen is focused
+      const list = get_app_list();
+      setSearch('');
+      setLocalList(list);
+      setFilteredList(list);
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return focus;
+  }, [navigation]);
+
+  const onSearch = value => {
     // lazy way to search for substring
-    const newList = list.filter(
+    const newList = localList.filter(
       item =>
         normalize_str(item.label.toUpperCase()).indexOf(
           normalize_str(value.toUpperCase()),
         ) !== -1,
     );
 
-    setLocalList(newList);
+    setFilteredList(newList);
   };
 
-  const onSearchDebouncer = useCallback(debounce(onSearch, 300), []);
+  const onSearchDebouncer = value => {
+    setSearch(value);
+    const debounced = debounce(() => onSearch(value), 300);
+    debounced();
+  };
 
   return (
     <SafeAreaView flex={1} backgroundColor={theme.bg_color}>
       <View backgroundColor={theme.actions_bg_color} flexDirection="row">
-        <View style={styles.action_search}>
+        <View paddingY={5} paddingX={4}>
           <SearchIcon />
         </View>
         <TextInput
@@ -51,6 +74,7 @@ const AppList = ({ list, updateList }) => {
           placeholder="Search"
           placeholderTextColor={theme.actions_font_color}
           onChangeText={onSearchDebouncer}
+          value={search}
         />
         <Pressable onPress={set_default_launcher} style={styles.action_search}>
           <ThreeDotsIcon />
@@ -59,7 +83,7 @@ const AppList = ({ list, updateList }) => {
       <FlatList
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
-        data={search.length > 0 ? localList : list}
+        data={search.length > 0 ? filteredList : localList}
         style={styles.list}
         renderItem={({ item }) => (
           <Item
@@ -70,7 +94,6 @@ const AppList = ({ list, updateList }) => {
             }}
             onLongPress={async () => {
               await addFavListItem(item);
-              updateList();
             }}
           />
         )}
