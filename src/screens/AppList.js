@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -23,6 +23,7 @@ const AppList = ({ navigation }) => {
   const [localList, setLocalList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [search, setSearch] = useState('');
+  const inputRef = useRef(null);
 
   useEffect(() => {
     // TODO: fazer funcionar o unfocus, limpar search
@@ -38,11 +39,16 @@ const AppList = ({ navigation }) => {
       setSearch('');
       setLocalList(list);
       setFilteredList(list);
+      if (inputRef.current) {
+        setTimeout(() => {
+          inputRef.current.focus();
+        }, 300);
+      }
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return focus;
-  }, [navigation]);
+  }, [navigation, inputRef]);
 
   const onSearch = value => {
     // lazy way to search for substring
@@ -62,6 +68,10 @@ const AppList = ({ navigation }) => {
     debounced();
   };
 
+  const openSettings = () => {
+    navigation.navigate('Settings');
+  };
+
   return (
     <SafeAreaView flex={1} backgroundColor={theme.bg_color}>
       <View backgroundColor={theme.actions_bg_color} flexDirection="row">
@@ -69,6 +79,8 @@ const AppList = ({ navigation }) => {
           <SearchIcon />
         </View>
         <TextInput
+          ref={inputRef}
+          autoFocus={true}
           flex={1}
           style={styles.action_item}
           placeholder="Search"
@@ -76,7 +88,7 @@ const AppList = ({ navigation }) => {
           onChangeText={onSearchDebouncer}
           value={search}
         />
-        <Pressable onPress={set_default_launcher} style={styles.action_search}>
+        <Pressable onPress={openSettings} style={styles.action_search}>
           <ThreeDotsIcon />
         </Pressable>
       </View>

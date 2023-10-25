@@ -11,3 +11,7 @@ export const set_default_launcher = async () => {
 export const get_app_list = () => {
   return InstalledApps.getSortedApps();
 };
+
+export const open_settings = () => {
+  return RNLauncherKitHelper.goToSettings();
+};
