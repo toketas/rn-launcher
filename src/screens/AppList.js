@@ -55,7 +55,7 @@ const AppList = ({ navigation }) => {
     const newList = localList.filter(
       item =>
         normalize_str(item.label.toUpperCase()).indexOf(
-          normalize_str(value.toUpperCase()),
+          normalize_str(value.trim().toUpperCase()),
         ) !== -1,
     );
 
