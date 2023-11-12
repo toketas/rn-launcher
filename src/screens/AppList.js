@@ -7,7 +7,7 @@ import {
   TextInput,
 } from 'react-native';
 import { debounce } from 'lodash';
-import { SearchIcon, ThreeDotsIcon, View } from 'native-base';
+import { SearchIcon, Text, ThreeDotsIcon, View } from 'native-base';
 
 import Item from '../components/Item';
 import theme from '../config/theme';
@@ -20,6 +20,7 @@ import {
 import { normalize_str } from '../helpers/normalizer';
 
 const AppList = ({ navigation }) => {
+  const [loading, setLoading] = useState(true);
   const [localList, setLocalList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [search, setSearch] = useState('');
@@ -33,12 +34,14 @@ const AppList = ({ navigation }) => {
   }, [navigation]);
 
   useEffect(() => {
-    const focus = navigation.addListener('focus', () => {
+    const focus = navigation.addListener('focus', async () => {
+      setLoading(true);
       // The screen is focused
-      const list = get_app_list();
+      const list = await get_app_list();
       setSearch('');
       setLocalList(list);
       setFilteredList(list);
+      setLoading(false);
       if (inputRef.current) {
         setTimeout(() => {
           inputRef.current.focus();
@@ -72,6 +75,8 @@ const AppList = ({ navigation }) => {
     navigation.navigate('Settings');
   };
 
+  console.log(loading);
+
   return (
     <SafeAreaView flex={1} backgroundColor={theme.bg_color}>
       <View backgroundColor={theme.actions_bg_color} flexDirection="row">
@@ -92,25 +97,31 @@ const AppList = ({ navigation }) => {
           <ThreeDotsIcon />
         </Pressable>
       </View>
-      <FlatList
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-        data={search.length > 0 ? filteredList : localList}
-        style={styles.list}
-        renderItem={({ item }) => (
-          <Item
-            key={item.packageName}
-            item={item}
-            onPress={() => {
-              launch_app(item.packageName);
-            }}
-            onLongPress={async () => {
-              await addFavListItem(item);
-            }}
-          />
-        )}
-        keyExtractor={item => item.name}
-      />
+      {loading ? (
+        <View style={styles.item} flex={1} justifyContent="center">
+          <Text style={styles.action_item}>Loading apps...</Text>
+        </View>
+      ) : (
+        <FlatList
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          data={search.length > 0 ? filteredList : localList}
+          style={styles.list}
+          renderItem={({ item }) => (
+            <Item
+              key={item.packageName}
+              item={item}
+              onPress={() => {
+                launch_app(item.packageName);
+              }}
+              onLongPress={async () => {
+                await addFavListItem(item);
+              }}
+            />
+          )}
+          keyExtractor={item => item.name}
+        />
+      )}
     </SafeAreaView>
   );
 };
