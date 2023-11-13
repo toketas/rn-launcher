@@ -1,7 +1,6 @@
 import { Pressable, Text, View } from 'native-base';
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import Item from '../components/Item';
+import { Linking, StyleSheet } from 'react-native';
 import theme from '../config/theme';
 import { open_settings, set_default_launcher } from '../helpers/launcher';
 
@@ -28,7 +27,17 @@ const SettingsButton = ({ title, onPress }) => (
 const Author = () => (
   <View style={styles.item}>
     <Text color={theme.font_color} fontFamily={theme.font_family} fontSize={10}>
-      Made by toketas
+      Made by{' '}
+      <Text
+        onPress={() => {
+          Linking.openURL('https://linktr.ee/toketas');
+        }}
+        color={theme.font_color}
+        fontFamily={theme.font_family}
+        fontSize={10}
+        underline>
+        toketas
+      </Text>
     </Text>
   </View>
 );
