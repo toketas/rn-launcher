@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from 'native-base';
+import { Pressable, Text, View } from '@gluestack-ui/themed';
 import React from 'react';
 import { Linking, StyleSheet } from 'react-native';
 import theme from '../config/theme';
@@ -6,7 +6,7 @@ import { open_settings, set_default_launcher } from '../helpers/launcher';
 
 const styles = StyleSheet.create({
   item: {
-    padding: 15,
+    padding: 13,
     marginVertical: 0,
     marginHorizontal: 0,
   },
@@ -18,7 +18,7 @@ const SettingsButton = ({ title, onPress }) => (
       onPress();
     }}
     style={styles.item}>
-    <Text color={theme.font_color} fontFamily={theme.font_family}>
+    <Text color={theme.font_color} fontFamily={theme.font_family} fontSize={13}>
       {title}
     </Text>
   </Pressable>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -7,16 +7,18 @@ import {
   TextInput,
 } from 'react-native';
 import { debounce } from 'lodash';
-import { SearchIcon, Text, ThreeDotsIcon, View } from 'native-base';
+import {
+  Icon,
+  SearchIcon,
+  SettingsIcon,
+  Text,
+  View,
+} from '@gluestack-ui/themed';
 
 import Item from '../components/Item';
 import theme from '../config/theme';
 import { addFavListItem } from '../helpers/storage';
-import {
-  get_app_list,
-  launch_app,
-  set_default_launcher,
-} from '../helpers/launcher';
+import { get_app_list, launch_app } from '../helpers/launcher';
 import { normalize_str } from '../helpers/normalizer';
 
 const AppList = ({ navigation }) => {
@@ -80,8 +82,11 @@ const AppList = ({ navigation }) => {
   return (
     <SafeAreaView flex={1} backgroundColor={theme.bg_color}>
       <View backgroundColor={theme.actions_bg_color} flexDirection="row">
-        <View paddingY={5} paddingX={4}>
-          <SearchIcon />
+        <View
+          justifyContent="center"
+          paddingVertical={10}
+          paddingHorizontal={10}>
+          <Icon as={SearchIcon} />
         </View>
         <TextInput
           ref={inputRef}
@@ -94,12 +99,17 @@ const AppList = ({ navigation }) => {
           value={search}
         />
         <Pressable onPress={openSettings} style={styles.action_search}>
-          <ThreeDotsIcon />
+          <Icon as={SettingsIcon} color="white" />
         </Pressable>
       </View>
       {loading ? (
         <View style={styles.item} flex={1} justifyContent="center">
-          <Text style={styles.action_item}>Loading apps...</Text>
+          <Text
+            color={theme.font_color}
+            fontFamily={theme.font_family}
+            fontSize={13}>
+            Loading apps...
+          </Text>
         </View>
       ) : (
         <FlatList

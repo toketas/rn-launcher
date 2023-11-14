@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AppState, Text } from 'react-native';
-import { View } from 'native-base';
+import { View } from '@gluestack-ui/themed';
 
 import FavoriteList from '../components/FavoriteList';
 import theme from '../config/theme';
@@ -8,7 +8,7 @@ import { launch_app } from '../helpers/launcher';
 import { getFavList, removeFavListItem } from '../helpers/storage';
 
 const HintMessage = () => (
-  <View flex={1} padding={20}>
+  <View flex={1} p={20}>
     <Text style={{ fontFamily: theme.font_family, color: theme.font_color }}>
       First time here bud? Swipe left to list your apps.
     </Text>

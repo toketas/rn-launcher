@@ -1,14 +1,15 @@
 import React from 'react';
-import { NativeBaseProvider } from 'native-base';
 
 import 'react-native-gesture-handler';
 
 import Router from './Router';
+import { GluestackUIProvider } from '@gluestack-ui/themed';
+import { config } from '@gluestack-ui/config';
 
 const App = () => (
-  <NativeBaseProvider>
+  <GluestackUIProvider config={config}>
     <Router />
-  </NativeBaseProvider>
+  </GluestackUIProvider>
 );
 
 export default App;

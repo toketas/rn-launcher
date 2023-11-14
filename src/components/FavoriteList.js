@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'native-base';
+import { View } from '@gluestack-ui/themed';
 
 import Item from './Item';
 import theme from '../config/theme';
