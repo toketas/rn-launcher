@@ -36,14 +36,16 @@ const AppList = ({ navigation }) => {
   }, [navigation]);
 
   useEffect(() => {
-    const focus = navigation.addListener('focus', async () => {
+    const focus = navigation.addListener('focus', () => {
       setLoading(true);
       // The screen is focused
-      const list = await get_app_list();
+      const list = get_app_list();
       setSearch('');
       setLocalList(list);
       setFilteredList(list);
       setLoading(false);
+
+      // Open search form on every swipe
       if (inputRef.current) {
         setTimeout(() => {
           inputRef.current.focus();
@@ -56,6 +58,7 @@ const AppList = ({ navigation }) => {
   }, [navigation, inputRef]);
 
   const onSearch = value => {
+    // TODO: fuzzy search
     // lazy way to search for substring
     const newList = localList.filter(
       item =>
@@ -68,6 +71,7 @@ const AppList = ({ navigation }) => {
   };
 
   const onSearchDebouncer = value => {
+    // Wait 300ms before actual search
     setSearch(value);
     const debounced = debounce(() => onSearch(value), 300);
     debounced();
@@ -76,8 +80,6 @@ const AppList = ({ navigation }) => {
   const openSettings = () => {
     navigation.navigate('Settings');
   };
-
-  console.log(loading);
 
   return (
     <SafeAreaView flex={1} backgroundColor={theme.bg_color}>
@@ -99,7 +101,7 @@ const AppList = ({ navigation }) => {
           value={search}
         />
         <Pressable onPress={openSettings} style={styles.action_search}>
-          <Icon as={SettingsIcon} color="white" />
+          <Icon as={SettingsIcon} color={theme.font_color} />
         </Pressable>
       </View>
       {loading ? (
