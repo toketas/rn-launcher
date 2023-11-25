@@ -1,4 +1,4 @@
-package com.launcher;
+package com.toketas.simplelauncher;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

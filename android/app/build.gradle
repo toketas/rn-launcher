@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.launcher"
+    namespace "com.toketas.simplelauncher"
     defaultConfig {
-        applicationId "com.launcher"
+        applicationId "com.toketas.simplelauncher"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "launcher.app"
-               BlueprintName = "launcher"
-               ReferencedContainer = "container:launcher.xcodeproj">
+               BuildableName = "SimpleLauncher.app"
+               BlueprintName = "SimpleLauncher"
+               ReferencedContainer = "container:SimpleLauncher.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "launcherTests.xctest"
-               BlueprintName = "launcherTests"
-               ReferencedContainer = "container:launcher.xcodeproj">
+               BuildableName = "SimpleLauncherTests.xctest"
+               BlueprintName = "SimpleLauncherTests"
+               ReferencedContainer = "container:SimpleLauncher.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "launcher.app"
-            BlueprintName = "launcher"
-            ReferencedContainer = "container:launcher.xcodeproj">
+            BuildableName = "SimpleLauncher.app"
+            BlueprintName = "SimpleLauncher"
+            ReferencedContainer = "container:SimpleLauncher.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "launcher.app"
-            BlueprintName = "launcher"
-            ReferencedContainer = "container:launcher.xcodeproj">
+            BuildableName = "SimpleLauncher.app"
+            BlueprintName = "SimpleLauncher"
+            ReferencedContainer = "container:SimpleLauncher.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
