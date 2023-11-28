@@ -131,7 +131,7 @@ const AppList = ({ navigation }) => {
               }}
             />
           )}
-          keyExtractor={item => item.name}
+          keyExtractor={(item, index) => index.toString()}
         />
       )}
     </SafeAreaView>
