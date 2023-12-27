@@ -7241,11 +7241,6 @@ react-native-gesture-handler@^2.13.4:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-react-native-launcher-kit@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/react-native-launcher-kit/-/react-native-launcher-kit-1.0.4.tgz"
-  integrity sha512-Tt3wt8eHPQ/3dcGsBMB4dXfTiYdHkyvnwmS/guVh/UrIl1wlX+mZjfKSc87yj3ttUv6UQXjOuX9D2Lk5naqJIQ==
-
 react-native-pager-view@^6.2.2:
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.2.2.tgz#4c1c45d5f3f622c0922ef96ac114666392ebf5ec"

@@ -1,6 +1,6 @@
 {
   "name": "simplelauncher",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -23,7 +23,6 @@
     "react": "18.2.0",
     "react-native": "^0.72.5",
     "react-native-gesture-handler": "^2.13.4",
-    "react-native-launcher-kit": "^1.0.4",
     "react-native-pager-view": "^6.2.2",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "^3.27.0",

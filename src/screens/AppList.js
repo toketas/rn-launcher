@@ -7,6 +7,7 @@ import {
   TextInput,
 } from 'react-native';
 import { debounce } from 'lodash';
+
 import {
   Icon,
   SearchIcon,
@@ -28,36 +29,46 @@ const AppList = ({ navigation }) => {
   const [search, setSearch] = useState('');
   const inputRef = useRef(null);
 
+  // Unfocus event
   useEffect(() => {
-    // TODO: fazer funcionar o unfocus, limpar search
-    navigation.addListener('tabPress', () => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      console.debug("Unfocus event triggered");
+      setLoading(true);
       setSearch('');
     });
+
+    return unsubscribe;
   }, [navigation]);
 
+  // Focus event
   useEffect(() => {
-    const focus = navigation.addListener('focus', () => {
-      setLoading(true);
-      // The screen is focused
-      const list = get_app_list();
-      setSearch('');
-      setLocalList(list);
-      setFilteredList(list);
-      setLoading(false);
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.debug("Focus event triggered");
 
-      // Open search form on every swipe
-      if (inputRef.current) {
-        setTimeout(() => {
-          inputRef.current.focus();
-        }, 300);
-      }
+      const fetchData = async () => {
+        // The screen is focused
+        setSearch('');
+        setLoading(true);
+        const list = await get_app_list();
+        setLocalList(list);
+        setFilteredList(list);
+        setLoading(false);
+
+        // Open search form
+        if (inputRef.current) {
+          setTimeout(() => {
+            inputRef.current.focus();
+          }, 100);
+        }
+      };
+      fetchData();
     });
 
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return focus;
-  }, [navigation, inputRef]);
+    return unsubscribe;
+  }, [navigation]);
 
   const onSearch = value => {
+
     // TODO: fuzzy search
     // lazy way to search for substring
     const newList = localList.filter(
