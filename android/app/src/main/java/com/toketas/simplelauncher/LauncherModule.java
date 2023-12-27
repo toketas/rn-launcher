@@ -41,14 +41,6 @@ public class LauncherModule extends ReactContextBaseJavaModule {
         return "LauncherModule";
     }
 
-    @ReactMethod
-    public void Hello(String value, Promise promise) {
-        try {
-            promise.resolve(value);
-        } catch (Exception e) {
-            promise.reject("Error calling Hello", e);
-        }
-    }
 
     @ReactMethod
     public void getApps(Promise promise) {
