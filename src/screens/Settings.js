@@ -1,8 +1,10 @@
-import { Pressable, Text, View } from '@gluestack-ui/themed';
 import React from 'react';
 import { Linking, StyleSheet } from 'react-native';
+import { Pressable, Text, View } from '@gluestack-ui/themed';
+
 import theme from '../config/theme';
 import { open_settings, set_default_launcher } from '../helpers/launcher';
+import { __VERSION__, LINKTREE } from '../helpers/constants.js';
 
 const styles = StyleSheet.create({
   item: {
@@ -25,12 +27,16 @@ const SettingsButton = ({ title, onPress }) => (
 );
 
 const Author = () => (
-  <View style={styles.item}>
+  <View
+    display="flex"
+    flexDirection="row"
+    justifyContent="space-between"
+    style={styles.item}>
     <Text color={theme.font_color} fontFamily={theme.font_family} fontSize={10}>
       Made by{' '}
       <Text
         onPress={() => {
-          Linking.openURL('https://linktr.ee/toketas');
+          Linking.openURL(LINKTREE);
         }}
         color={theme.font_color}
         fontFamily={theme.font_family}
@@ -39,6 +45,7 @@ const Author = () => (
         toketas
       </Text>
     </Text>
+    <Text fontSize={12}>v{__VERSION__.replaceAll('"', '')}</Text>
   </View>
 );
 
