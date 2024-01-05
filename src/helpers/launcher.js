@@ -10,10 +10,8 @@ export const set_default_launcher = async () => {
   await LauncherModule.openSetDefaultLauncher();
 };
 
-export const get_app_list = async () => {
-  const apps = await LauncherModule?.getApps();
-  const result = JSON.parse(apps);
-  return result.sort((a, b) => (a.label?.toLowerCase().localeCompare(b.label?.toLowerCase())));
+export const get_app_list = () => {
+  return LauncherModule.getApps();
 };
 
 export const open_settings = async () => {

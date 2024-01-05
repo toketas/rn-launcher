@@ -32,43 +32,66 @@ const AppList = ({ navigation }) => {
   // Unfocus event
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
-      console.debug("Unfocus event triggered");
-      setLoading(true);
+      console.debug('Unfocus event triggered');
       setSearch('');
     });
 
     return unsubscribe;
   }, [navigation]);
 
+  // Compare lists
+  const areEqual = (a, b) => {
+    if (a.length !== b.length) {
+      return false;
+    }
+
+    if (a.length === 0) {
+      return true;
+    }
+
+    a.forEach((item, index) => {
+      if (item.packageName !== b[index].packageName) {
+        return false;
+      }
+    });
+
+    return true;
+  };
+
   // Focus event
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      console.debug("Focus event triggered");
+      console.debug('Focus event triggered');
 
-      const fetchData = async () => {
-        // The screen is focused
-        setSearch('');
-        setLoading(true);
-        const list = await get_app_list();
-        setLocalList(list);
-        setFilteredList(list);
-        setLoading(false);
+      const fetchData = () => {
+        get_app_list().then(apps => {
+          const result = JSON.parse(apps);
+          const list = result.sort((a, b) =>
+            a.label?.toLowerCase().localeCompare(b.label?.toLowerCase()),
+          );
 
-        // Open search form
-        if (inputRef.current) {
-          setTimeout(() => {
-            inputRef.current.focus();
-          }, 100);
-        }
+          if (!areEqual(list, localList)) {
+            setLocalList(list);
+            setFilteredList(list);
+            setLoading(false);
+          }
+        });
       };
+
       fetchData();
+
+      // Open search form
+      if (inputRef.current) {
+        setTimeout(() => {
+          inputRef.current.focus();
+        }, 250);
+      }
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, localList]);
 
   const onSearch = value => {
-
     // TODO: fuzzy search
     // lazy way to search for substring
     const newList = localList.filter(
@@ -115,7 +138,7 @@ const AppList = ({ navigation }) => {
           <Icon as={SettingsIcon} color={theme.font_color} />
         </Pressable>
       </View>
-      {loading ? (
+      {loading || localList.length === 0 ? (
         <View style={styles.item} flex={1} justifyContent="center">
           <Text
             color={theme.font_color}
