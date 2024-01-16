@@ -80,16 +80,14 @@ const AppList = ({ navigation }) => {
 
       fetchData();
 
-      // Open search form
-      if (inputRef.current) {
-        setTimeout(() => {
-          inputRef.current.focus();
-        }, 250);
-      }
+      //// Open search form
+      //if (inputRef.current) {
+      //  inputRef.current.focus();
+      //}
     });
 
     return unsubscribe;
-  }, [navigation, localList]);
+  }, [navigation]);
 
   const onSearch = value => {
     // TODO: fuzzy search
