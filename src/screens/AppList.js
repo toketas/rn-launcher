@@ -18,13 +18,12 @@ import {
 
 import Item from '../components/Item';
 import theme from '../config/theme';
-import { addFavListItem } from '../helpers/storage';
-import { get_app_list, launch_app } from '../helpers/launcher';
+import { addFavListItem, addRecentList } from '../helpers/storage';
+import { launch_app } from '../helpers/launcher';
 import { normalize_str } from '../helpers/normalizer';
 
-const AppList = ({ navigation }) => {
-  const [loading, setLoading] = useState(true);
-  const [localList, setLocalList] = useState([]);
+const AppList = ({ navigation, list, loading, loadApps }) => {
+  //const [recentApps, setRecentApps] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [search, setSearch] = useState('');
   const inputRef = useRef(null);
@@ -34,65 +33,36 @@ const AppList = ({ navigation }) => {
     const unsubscribe = navigation.addListener('blur', () => {
       console.debug('Unfocus event triggered');
       setSearch('');
+
+      //const load = async () => {
+      //  const list = await getRecentApps();
+      //  setRecentApps(list);
+      //};
+      //load();
     });
 
     return unsubscribe;
   }, [navigation]);
-
-  // Compare lists
-  const areEqual = (a, b) => {
-    if (a.length !== b.length) {
-      return false;
-    }
-
-    if (a.length === 0) {
-      return true;
-    }
-
-    a.forEach((item, index) => {
-      if (item.packageName !== b[index].packageName) {
-        return false;
-      }
-    });
-
-    return true;
-  };
 
   // Focus event
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.debug('Focus event triggered');
-
-      const fetchData = () => {
-        get_app_list().then(apps => {
-          const result = JSON.parse(apps);
-          const list = result.sort((a, b) =>
-            a.label?.toLowerCase().localeCompare(b.label?.toLowerCase()),
-          );
-
-          if (!areEqual(list, localList)) {
-            setLocalList(list);
-            setFilteredList(list);
-            setLoading(false);
-          }
-        });
-      };
-
-      fetchData();
-
-      //// Open search form
-      //if (inputRef.current) {
-      //  inputRef.current.focus();
-      //}
+      loadApps();
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 150);
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, loadApps]);
 
   const onSearch = value => {
     // TODO: fuzzy search
     // lazy way to search for substring
-    const newList = localList.filter(
+    const newList = list.filter(
       item =>
         normalize_str(item.label.toUpperCase()).indexOf(
           normalize_str(value.trim().toUpperCase()),
@@ -136,7 +106,7 @@ const AppList = ({ navigation }) => {
           <Icon as={SettingsIcon} color={theme.font_color} />
         </Pressable>
       </View>
-      {loading || localList.length === 0 ? (
+      {list.length === 0 || loading ? (
         <View style={styles.item} flex={1} justifyContent="center">
           <Text
             color={theme.font_color}
@@ -146,25 +116,48 @@ const AppList = ({ navigation }) => {
           </Text>
         </View>
       ) : (
-        <FlatList
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-          data={search.length > 0 ? filteredList : localList}
-          style={styles.list}
-          renderItem={({ item }) => (
-            <Item
-              key={item.packageName}
-              item={item}
-              onPress={() => {
-                launch_app(item.packageName);
-              }}
-              onLongPress={async () => {
-                await addFavListItem(item);
-              }}
-            />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        <>
+          {/*<FlatList
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
+            data={recentApps}
+            style={styles.list}
+            renderItem={({ item }) => (
+              <Item
+                key={item.packageName}
+                item={item}
+                onPress={() => {
+                  launch_app(item.packageName);
+                  addRecentList(item);
+                }}
+                onLongPress={async () => {
+                  await addFavListItem(item);
+                }}
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />*/}
+          <FlatList
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
+            data={search.length > 0 ? filteredList : list}
+            style={styles.list}
+            renderItem={({ item }) => (
+              <Item
+                key={item.packageName}
+                item={item}
+                onPress={() => {
+                  launch_app(item.packageName);
+                  addRecentList(item);
+                }}
+                onLongPress={async () => {
+                  await addFavListItem(item);
+                }}
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </>
       )}
     </SafeAreaView>
   );

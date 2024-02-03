@@ -9,6 +9,24 @@ export const getFavList = async () => {
   return [];
 };
 
+export const getRecentApps = async () => {
+  const list = await AsyncStorage.getItem('recentApps');
+  if (list !== null) {
+    return JSON.parse(list);
+  }
+  return [];
+};
+
+export const addRecentList = async item => {
+  const current = await getRecentApps();
+  if (current.find(el => el.packageName === item.packageName) !== undefined) {
+    current.push({ packageName: item.packageName, label: item.label });
+    current.shift();
+    await AsyncStorage.setItem('recentApps', JSON.stringify(current));
+  }
+  return;
+};
+
 export const addFavListItem = async item => {
   const currentList = await getFavList();
   if (currentList.find(i => i.label === item.label) !== undefined) {
