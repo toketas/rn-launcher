@@ -9,6 +9,7 @@ export const areListEqual = (a, b) => {
 
   a.forEach((item, index) => {
     if (item.packageName !== b[index].packageName) {
+      console.log('b');
       return false;
     }
   });

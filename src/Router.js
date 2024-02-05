@@ -12,7 +12,29 @@ import { areListEqual } from './helpers/utils';
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
-const Main = () => {
+const Main = ({ localList, loading, loadApps }) => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarStyle: { height: '0', display: 'none' },
+      }}>
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="AppList">
+        {props => (
+          <AppList
+            {...props}
+            list={localList}
+            loadApps={loadApps}
+            loading={loading}
+          />
+        )}
+      </Tab.Screen>
+    </Tab.Navigator>
+  );
+};
+
+const Router = () => {
   const [localList, setLocalList] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,38 +58,29 @@ const Main = () => {
   }, []);
 
   return (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarShowLabel: false,
-        tabBarStyle: { height: '0', display: 'none' },
-      }}>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="AppList">
-        {props => (
-          <AppList
-            {...props}
-            list={localList}
-            loadApps={fetchData}
-            loading={loading}
-          />
-        )}
-      </Tab.Screen>
-    </Tab.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            height: 0,
+          },
+        }}>
+        <Stack.Screen name="Main">
+          {props => (
+            <Main
+              {...props}
+              localList={localList}
+              loadApps={fetchData}
+              loading={loading}
+            />
+          )}
+        </Stack.Screen>
+        <Stack.Screen name="Settings">
+          {props => <Settings {...props} loadApps={fetchData} />}
+        </Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
-
-const Router = () => (
-  <NavigationContainer>
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          height: 0,
-        },
-      }}>
-      <Stack.Screen name="Main" component={Main} />
-      <Stack.Screen name="Settings" component={Settings} />
-    </Stack.Navigator>
-  </NavigationContainer>
-);
 
 export default Router;

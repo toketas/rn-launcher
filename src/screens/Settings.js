@@ -49,7 +49,7 @@ const Author = () => (
   </View>
 );
 
-const Settings = () => {
+const Settings = ({ loadApps }) => {
   return (
     <View flex={1} backgroundColor={theme.actions_bg_color}>
       <SettingsButton
@@ -57,6 +57,7 @@ const Settings = () => {
         title="Set default launcher"
       />
       <SettingsButton onPress={open_settings} title="Open Phone Settings" />
+      <SettingsButton onPress={loadApps} title="Refresh Apps Screen" />
       <View flex={1} />
       <Author />
     </View>

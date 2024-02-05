@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   StyleSheet,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import { debounce } from 'lodash';
 
@@ -32,6 +33,7 @@ const AppList = ({ navigation, list, loading, loadApps }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       console.debug('Unfocus event triggered');
+      loadApps();
       setSearch('');
 
       //const load = async () => {
@@ -48,12 +50,6 @@ const AppList = ({ navigation, list, loading, loadApps }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.debug('Focus event triggered');
-      loadApps();
-      setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
-      }, 150);
     });
 
     return unsubscribe;
@@ -137,6 +133,35 @@ const AppList = ({ navigation, list, loading, loadApps }) => {
             )}
             keyExtractor={(item, index) => index.toString()}
           />*/}
+          {/*<ScrollView style={styles.list}>
+            {search.length > 0
+              ? filteredList.map(item => (
+                  <Item
+                    key={item.packageName}
+                    item={item}
+                    onPress={() => {
+                      launch_app(item.packageName);
+                      addRecentList(item);
+                    }}
+                    onLongPress={async () => {
+                      await addFavListItem(item);
+                    }}
+                  />
+                ))
+              : list.map(item => (
+                  <Item
+                    key={item.packageName}
+                    item={item}
+                    onPress={() => {
+                      launch_app(item.packageName);
+                      addRecentList(item);
+                    }}
+                    onLongPress={async () => {
+                      await addFavListItem(item);
+                    }}
+                  />
+                ))}
+          </ScrollView>*/}
           <FlatList
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag"
