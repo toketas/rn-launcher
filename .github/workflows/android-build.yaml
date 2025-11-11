@@ -54,6 +54,15 @@ jobs:
 
       - name: Make Gradlew Executable
         run: cd android && chmod +x ./gradlew
+      
+      - name: Restore gradle.properties
+        env:
+          GRADLE_PROPERTIES: android.useAndroidX=true
+        shell: bash
+        run: |
+          mkdir -p ~/.gradle/
+          echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
+          echo "${GRADLE_PROPERTIES}" > ~/.gradle/gradle.properties
 
       - name: Generate App APK
         env:
